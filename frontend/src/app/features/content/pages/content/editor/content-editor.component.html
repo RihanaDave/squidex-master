@@ -1,0 +1,47 @@
+<sqx-form-error bubble="true" closeable="true" [error]="(contentForm.error | async)"></sqx-form-error>
+
+<sqx-list-view>
+    <ng-container topHeader>        
+        <div class="alert alert-danger" *ngIf="!contentVersion && isDeleted">
+            {{ 'contents.deleted' | sqxTranslate }}
+        </div>
+
+        <div class="alert alert-danger" *ngIf="contentVersion">
+            <div class="float-end">
+                <a (click)="loadLatest.emit()">{{ 'contents.viewLatest' | sqxTranslate }}</a>
+            </div>
+
+            <div *ngIf="isDeleted"
+                [innerHTML]="'contents.versionViewingDeleted' | sqxTranslate: { version: contentVersion } | sqxMarkdownInline | sqxSafeHtml">
+            </div>
+            
+            <div *ngIf="!isDeleted"
+                [innerHTML]="'contents.versionViewing' | sqxTranslate: { version: contentVersion } | sqxMarkdownInline | sqxSafeHtml">
+            </div>
+        </div>
+        
+        <div *ngIf="isNew && showIdInput">
+            <input class="form-control" placeholder="{{ 'contents.idPlaceholder' | sqxTranslate }}" 
+                [ngModel]="contentId"    
+                (ngModelChange)="contentIdChange.emit($event)" />
+        </div>
+    </ng-container>
+
+    <ng-container>
+        <div class="cursors" sqxCursors>
+            <sqx-content-section *ngFor="let section of contentForm.sections; trackBy: trackBySection"
+                [form]="contentForm"
+                [formCompare]="contentFormCompare"
+                [formContext]="formContext"
+                [formLevel]="0"
+                [formSection]="section"
+                [language]="language"
+                (languageChange)="languageChange.emit($event)"
+                [languages]="languages"
+                [schema]="schema">
+            </sqx-content-section>
+
+            <sqx-cursors></sqx-cursors>
+        </div>
+    </ng-container>
+</sqx-list-view>

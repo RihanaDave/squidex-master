@@ -1,0 +1,23 @@
+<div
+    cdkDropListGroup
+    cdkDropList
+    [cdkDropListDisabled]="!sortable"
+    [cdkDropListData]="fieldGroups"
+    (cdkDropListDropped)="sortGroups($event)">
+    <div *ngFor="let group of fieldGroups;" class="table-drag" 
+        cdkDrag
+        cdkDragLockAxis="y"
+        [cdkDragDisabled]="!group.separator">
+        <sqx-field-group 
+            [languages]="languages"
+            [fieldsEmpty]="fieldsEmpty" 
+            [fieldGroup]="group" 
+            [parent]="parent"
+            [schema]="schema"
+            [settings]="settings" 
+            [sortable]="sortable"
+            (sorted)="sortFields($event)">
+            <i cdkDragHandle class="icon-drag2 drag-handle"></i>
+        </sqx-field-group>
+    </div>
+</div>

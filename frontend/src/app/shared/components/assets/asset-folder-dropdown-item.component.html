@@ -1,0 +1,26 @@
+<div class="control-dropdown-item d-flex align-items-center" [class.active]="nodeModel.isSelected" [style.paddingLeft]="paddingLeft" (click)="selectNode.emit(nodeModel)">
+    <ng-container *ngIf="nodeModel.isLoading; else notLoading" class="loader">
+        <button type="button" class="btn btn-sm btn-decent btn-text-secondary">
+            <sqx-loader size="14"></sqx-loader>
+        </button>
+    </ng-container>
+
+    <ng-template #notLoading>
+        <button type="button" class="btn btn-sm btn-decent btn-text-secondary" (click)="toggle()" sqxStopClick [class.invisible]="nodeModel.isLoaded && nodeModel.children.length === 0">
+            <i [class.icon-caret-right]="!nodeModel.isExpanded || !nodeModel.isLoaded" [class.icon-caret-down]="nodeModel.isExpanded && nodeModel.isLoaded"></i>
+        </button>
+    </ng-template>
+
+    <div class="name truncate">
+        {{nodeModel.item.folderName | sqxTranslate}}
+    </div>
+</div>
+
+<div class="tree-children" *ngIf="nodeModel.isExpanded || nodeModel.isSelected">
+    <sqx-asset-folder-dropdown-item *ngFor="let child of nodeModel.children; trackBy: trackByNode"
+        [appName]="appName" 
+        [nodeModel]="child"
+        [nodeLevel]="nodeLevel + 1"
+        (selectNode)="selectNode.emit($event)">
+    </sqx-asset-folder-dropdown-item>
+</div>
